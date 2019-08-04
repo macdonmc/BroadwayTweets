@@ -1,5 +1,5 @@
 # BroadwayTweets
-I wrote this program to help me figure out which current Off-Broadway shows are well liked. Many shows find fame/a path to Broadway through social media (such as Be More Chill), so I though that Twitter would be a good way to collect this information.
+I wrote this program to help me figure out which current Off-Broadway shows are well liked. Many shows find fame/a path to Broadway through social media (such as Be More Chill), so I thought that Twitter would be a good way to collect this information.
 Additionally, this program may tell us more about which shows are more likely to make it to Broadway (those which come out with a higher popularity score).
 
 # How it works
