@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[21]:
+# In[26]:
 
 
 import tweepy
@@ -40,11 +40,10 @@ class TweetPrinter():
         for show in offBroadwayShows:
             positiveCount = 0
             negativeCount = 0
-            neutralCount = 0
-            wordFound = False
+            totalScore = 0
             
             #reminder -- count automatically set to 15
-            broadway_tweets = api.search(q=show)
+            broadway_tweets = api.search(q=show, count = 2)
         
             #search thru each tweet
             for tweet in broadway_tweets:
@@ -52,23 +51,28 @@ class TweetPrinter():
                 for word in positiveList:
                     if word in tweet.text:
                         positiveCount += 1
-                        wordFound = True
         
                 #find negative words in tweet
                 for word in negativeList:
                     if word in tweet.text:
                         negativeCount += 1
-                        wordFound = True
+                
+                #decide if tweet is overall positive or negative
+                if positiveCount > negativeCount:
+                    totalScore += 1
+                if negativeCount > positiveCount:
+                    totalScore -= 1
             
-                #check to see if any positive/negative words were found
-                if wordFound == False:
-                    neutralCount += 1
-            
-            if (positiveCount - negativeCount) > bestCount:
-                bestCount = positiveCount - negativeCount
+            #check if it is the best score so far
+            if totalScore > bestCount:
+                bestCount = totalScore
                 bestShow = show
+            
+            #check if it is the same as the best score
+            if totalScore == bestCount:
+                bestShow += (' & ' + show)
         
-            printResults(show, negativeCount, positiveCount)
+            printResults(show, totalScore)
             
         print('It looks like the most liked show is ' + bestShow + '. Go see it before it goes on Broadway!')
             
@@ -100,11 +104,9 @@ def createBroadwayList():
     
     return offBroadwayShows
 
-def printResults(show, negativeCount, positiveCount):
+def printResults(show, totalScore):
     print('Show: '+ show)
-    print('Positive: ' + str(positiveCount))
-    print('Negative: ' + str(negativeCount))
-                                  
+    print('Popularity score: ' + str(totalScore))                         
                                   
 def main():
     tweet_printer = TweetPrinter(consumer_key, consumer_secret, access_token, access_token_secret)
